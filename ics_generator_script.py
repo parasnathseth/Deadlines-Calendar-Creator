@@ -5,7 +5,7 @@ from datetime import timedelta
 calendar = Calendar()
 calendar.add('version', '2.0')
 
-path_to_excel_file = "Dal Due Dates W24-25.xlsx"
+path_to_excel_file = ""
 data_frame = pd.read_excel(path_to_excel_file, index_col=None, sheet_name="Due Dates")
 data_frame['Due Date'] = pd.to_datetime(data_frame['Due Date'], errors='coerce')
 print("\n::STARTED::")
