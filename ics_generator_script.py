@@ -30,6 +30,7 @@ for index, row in data_frame.iterrows():
     event.add('dtend', deadline_datetime.date())
     event.add('description', f"Assignment: {assignment}\nCourse: {course}")
     event.add('status', 'CONFIRMED')
+    event.add('transp', 'TRANSPARENT')
     event.add('class', 'PRIVATE')
 
     # Adding reminders
