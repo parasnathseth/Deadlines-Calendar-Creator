@@ -8,6 +8,7 @@ calendar.add('version', '2.0')
 path_to_excel_file = "Dal Due Dates W24-25.xlsx"
 data_frame = pd.read_excel(path_to_excel_file, index_col=None, sheet_name="Due Dates")
 data_frame['Due Date'] = pd.to_datetime(data_frame['Due Date'], errors='coerce')
+print("\n::STARTED::")
 
 for index, row in data_frame.iterrows():
     try:
@@ -15,12 +16,12 @@ for index, row in data_frame.iterrows():
         assignment = row['Assignment']
         course = row['Course']
     except KeyError:
-        print("There was an error reading the excel file...")
+        print("❗There was an error reading the excel file...")
         exit(1)
     
     # If a due date is empty, skip adding that event
     if pd.isna(deadline_datetime):
-        print(f"Event not created for {assignment} - {course}")
+        print(f"❌ Event not created for {assignment} - {course} (Unknown Due Date)")
         continue
 
     event = Event()
@@ -52,4 +53,5 @@ ics_file = 'assignments_calendar.ics'
 with open(ics_file, 'wb') as f:
     f.write(calendar.to_ical())
 
-print(f".ics calendar file created: {ics_file}")
+print(f"✔️  Calendar file created: '{ics_file}'")
+print("::FINISHED::\n")
