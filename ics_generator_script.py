@@ -1,17 +1,17 @@
 import pandas as pd
 from icalendar import Calendar, Event, Alarm
-from datetime import datetime, timedelta
+from datetime import timedelta
 
 calendar = Calendar()
 calendar.add('version', '2.0')
 
-path_to_excel_file = ""
+path_to_excel_file = "Dal Due Dates W24-25.xlsx"
 data_frame = pd.read_excel(path_to_excel_file, index_col=None, sheet_name="Due Dates")
 data_frame['Due Date'] = pd.to_datetime(data_frame['Due Date'], errors='coerce')
 
 for index, row in data_frame.iterrows():
     try:
-        due_date = row['Due Date']
+        deadline_datetime = row['Due Date']
         assignment = row['Assignment']
         course = row['Course']
     except KeyError:
@@ -19,14 +19,14 @@ for index, row in data_frame.iterrows():
         exit(1)
     
     # If a due date is empty, skip adding that event
-    if pd.isna(due_date):
+    if pd.isna(deadline_datetime):
         print(f"Event not created for {assignment} - {course}")
         continue
 
     event = Event()
     event.add('summary', f"{assignment} {course}")
-    event.add('dtstart', due_date.date())
-    event.add('dtend', due_date.date())
+    event.add('dtstart', deadline_datetime.date())
+    event.add('dtend', deadline_datetime.date())
     event.add('description', f"Assignment: {assignment}\nCourse: {course}")
     event.add('status', 'CONFIRMED')
     event.add('class', 'PRIVATE')
@@ -36,11 +36,11 @@ for index, row in data_frame.iterrows():
     for offset in reminder_offsets:
         
         # Calculating a reminder time of 9:00 AM
-        reminder_time = due_date - timedelta(days=offset)
+        reminder_time = deadline_datetime - timedelta(days=offset)
         reminder_time = reminder_time.replace(hour=9, minute=0, second=0)
-        
+
         alarm = Alarm()
-        alarm.add('trigger', reminder_time - due_date)
+        alarm.add('trigger', reminder_time - deadline_datetime)
         alarm.add('action', 'DISPLAY')
         alarm.add('description', f"Reminder for {assignment} {course}")
         event.add_component(alarm)
