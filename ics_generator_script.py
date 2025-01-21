@@ -1,11 +1,33 @@
 import pandas as pd
+import os
 from icalendar import Calendar, Event, Alarm
 from datetime import timedelta
+from dotenv import load_dotenv
 
 calendar = Calendar()
 calendar.add('version', '2.0')
 
-path_to_excel_file = ""
+def is_excel_file_valid(file_path):
+    if not file_path:
+        print("❗ Unable to find the source file. Please ensure the EXCEL_FILE_PATH is specified in the .env file.")
+        return False
+    
+    if not file_path.endswith(".xlsx"):
+        print("❗ The specified file is not an Excel file. Please provide a valid .xlsx file.")
+        return False
+
+    if not os.path.isfile(file_path):
+        print(f"❗ The file '{file_path}' does not exist. Please check the path and try again.")
+        return False
+    
+    return True
+
+# Get the excel file path from .env
+load_dotenv()
+path_to_excel_file = os.getenv('EXCEL_FILE_PATH')
+if (not is_excel_file_valid(path_to_excel_file)):
+    exit(1)
+
 data_frame = pd.read_excel(path_to_excel_file, index_col=None, sheet_name="Due Dates")
 data_frame['Due Date'] = pd.to_datetime(data_frame['Due Date'], errors='coerce')
 print("\n::STARTED::")
@@ -16,7 +38,7 @@ for index, row in data_frame.iterrows():
         assignment = row['Assignment']
         course = row['Course']
     except KeyError:
-        print("❗There was an error reading the excel file...")
+        print("❗ There was an error reading the excel file...")
         exit(1)
     
     # If a due date is empty, skip adding that event
