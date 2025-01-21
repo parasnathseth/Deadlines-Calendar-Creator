@@ -1,4 +1,4 @@
-# Deadline Calendar Creator
+# Deadlines Calendar Creator
 
 ## **What is this?**
 This is a Python script that generates an `.ics` calendar file from an Excel spreadsheet containing assignment due dates. The `.ics` file can then be imported into calendar applications.
@@ -7,7 +7,7 @@ This is a Python script that generates an `.ics` calendar file from an Excel spr
 
 I absolutely love using Excel and Calendar apps to stay on top of my deadlines and events.
 
-At the beginnning of every semester of university, I put together a spreadsheet containing all my course-related deadlines and dates for major events. I then end up spending a *really* long time creating events for each deadline.
+At the beginnning of every semester of university, I put together a spreadsheet containing all my course-related deadlines and dates for major events. I then end up spending a *really* long time creating calendar events for each deadline.
 
 I created this simple script to automate the manual process of adding assignment due dates to my calendar, saving me some time each semester!
 
