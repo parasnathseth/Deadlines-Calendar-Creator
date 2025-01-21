@@ -11,7 +11,7 @@ data_frame['Due Date'] = pd.to_datetime(data_frame['Due Date'], errors='coerce')
 
 for index, row in data_frame.iterrows():
     try:
-        due_date = (row['Due Date']).date()
+        due_date = row['Due Date']
         assignment = row['Assignment']
         course = row['Course']
     except KeyError:
@@ -25,8 +25,8 @@ for index, row in data_frame.iterrows():
 
     event = Event()
     event.add('summary', f"{assignment} {course}")
-    event.add('dtstart', due_date)
-    event.add('dtend', due_date)
+    event.add('dtstart', due_date.date())
+    event.add('dtend', due_date.date())
     event.add('description', f"Assignment: {assignment}\nCourse: {course}")
     event.add('status', 'CONFIRMED')
     event.add('class', 'PRIVATE')
@@ -34,9 +34,13 @@ for index, row in data_frame.iterrows():
     # Adding reminders
     reminder_offsets = [0, 1, 2, 4, 6]  # Days before the event
     for offset in reminder_offsets:
-        alarm = Alarm()
+        
+        # Calculating a reminder time of 9:00 AM
         reminder_time = due_date - timedelta(days=offset)
-        alarm.add('trigger', timedelta(days=-offset, hours=-9))
+        reminder_time = reminder_time.replace(hour=9, minute=0, second=0)
+        
+        alarm = Alarm()
+        alarm.add('trigger', reminder_time - due_date)
         alarm.add('action', 'DISPLAY')
         alarm.add('description', f"Reminder for {assignment} {course}")
         event.add_component(alarm)
