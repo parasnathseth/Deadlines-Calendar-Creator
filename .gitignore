@@ -3,6 +3,12 @@ __pycache__/
 *.py[cod]
 *$py.class
 
+# Excel Files
+*.xlsx
+
+# .ics Calendar Files
+*.ics
+
 # C extensions
 *.so
 
